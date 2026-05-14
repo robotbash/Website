@@ -1,0 +1,2238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Yoberosa — Hesperia, Michigan</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Zilla+Slab:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,300;1,8..60,400&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ==============================
+       CSS CUSTOM PROPERTIES
+    ============================== */
+    :root {
+      --bg:           #1A1712;
+      --bg-secondary: #231F18;
+      --bg-card:      #1F1B14;
+      --accent:       #C8873A;
+      --accent-muted: #8B5E2A;
+      --text:         #EDE8DF;
+      --text-muted:   #A09585;
+      --green:        #3D5440;
+      --rule:         rgba(200, 135, 58, 0.25);
+      --rule-solid:   rgba(200, 135, 58, 0.6);
+      --font-display: 'Zilla Slab', Georgia, serif;
+      --font-body:    'Source Serif 4', Georgia, serif;
+    }
+
+    /* ==============================
+       RESET & BASE
+    ============================== */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      font-size: 16px;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-weight: 400;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    ::selection {
+      background: var(--accent);
+      color: var(--bg);
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    /* ==============================
+       SKIP LINK
+    ============================== */
+    .skip-link {
+      position: absolute;
+      top: -100%;
+      left: 1rem;
+      z-index: 200;
+      padding: 0.75rem 1.5rem;
+      background: var(--accent);
+      color: var(--bg);
+      font-family: var(--font-display);
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border-radius: 0 0 4px 4px;
+      transition: top 0.2s ease;
+    }
+    .skip-link:focus {
+      top: 0;
+    }
+
+    /* ==============================
+       FOCUS VISIBLE
+    ============================== */
+    :focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 3px;
+      border-radius: 2px;
+    }
+
+    .form-input:focus-visible,
+    .form-textarea:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 0;
+      border-color: var(--accent);
+    }
+
+    /* ==============================
+       TOUCH ACTION
+    ============================== */
+    .btn-primary,
+    .btn-ghost,
+    .btn-submit,
+    .nav-cta,
+    .nav-mobile-toggle {
+      touch-action: manipulation;
+    }
+
+    /* ==============================
+       SECTION LABEL UTILITY
+    ============================== */
+    .section-label {
+      display: inline-block;
+      font-family: var(--font-display);
+      font-weight: 500;
+      font-size: 0.75rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.5rem;
+    }
+
+    .section-label::before {
+      content: '';
+      display: inline-block;
+      width: 1.5rem;
+      height: 1px;
+      background: var(--accent);
+      vertical-align: middle;
+      margin-right: 0.75rem;
+      position: relative;
+      top: -1px;
+    }
+
+    /* ==============================
+       SCROLL REVEAL
+    ============================== */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+                  transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.32s; }
+    .reveal-delay-4 { transition-delay: 0.44s; }
+    .reveal-delay-5 { transition-delay: 0.56s; }
+
+    /* ==============================
+       NAVIGATION
+    ============================== */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 1.25rem 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: background 0.45s ease, backdrop-filter 0.45s ease, padding 0.35s ease;
+    }
+
+    .nav.scrolled {
+      background: rgba(20, 17, 12, 0.88);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      padding: 0.9rem 2.5rem;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .nav-logo {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 1.1rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text);
+      opacity: 0;
+      transform: translateY(-8px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+
+    .nav.scrolled .nav-logo,
+    .nav-logo:focus-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: var(--font-display);
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      transition: color 0.2s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--accent);
+    }
+
+    .nav-cta {
+      font-family: var(--font-display);
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--bg);
+      background: var(--accent);
+      padding: 0.55rem 1.25rem;
+      border-radius: 2px;
+      transition: background 0.2s ease, opacity 0.2s ease;
+    }
+
+    .nav-cta:hover {
+      background: #d9943f;
+    }
+
+    .nav-mobile-toggle {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0.25rem;
+      flex-direction: column;
+      gap: 5px;
+      min-width: 44px;
+      min-height: 44px;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .nav-mobile-toggle span {
+      display: block;
+      width: 22px;
+      height: 1.5px;
+      background: var(--text);
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+
+    .nav-mobile-open .nav-mobile-toggle span:nth-child(1) {
+      transform: translateY(6.5px) rotate(45deg);
+    }
+    .nav-mobile-open .nav-mobile-toggle span:nth-child(2) {
+      opacity: 0;
+    }
+    .nav-mobile-open .nav-mobile-toggle span:nth-child(3) {
+      transform: translateY(-6.5px) rotate(-45deg);
+    }
+
+    /* ==============================
+       HERO
+    ============================== */
+    .hero {
+      position: relative;
+      width: 100%;
+      min-height: 100dvh;
+      height: 100vh; /* fallback for browsers without dvh */
+      min-height: max(600px, 100dvh);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background-image: url('images/DSC00050.JPG');
+      background-size: cover;
+      background-position: center 40%;
+      transform: scale(1.06);
+      animation: heroZoom 12s ease-out forwards;
+    }
+
+    @keyframes heroZoom {
+      from { transform: scale(1.06); }
+      to   { transform: scale(1.0); }
+    }
+
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        180deg,
+        rgba(20, 17, 12, 0.2) 0%,
+        rgba(20, 17, 12, 0.55) 50%,
+        rgba(20, 17, 12, 0.85) 100%
+      );
+    }
+
+    /* Grain texture */
+    .hero-overlay::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      opacity: 0.35;
+      pointer-events: none;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 0 1.5rem;
+      max-width: 780px;
+    }
+
+    .hero-eyebrow {
+      font-family: var(--font-display);
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.25rem;
+      opacity: 0;
+      animation: fadeUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.3s forwards;
+    }
+
+    .hero-title {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: clamp(4rem, 12vw, 9rem);
+      line-height: 0.92;
+      letter-spacing: -0.01em;
+      color: var(--text);
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fadeUp 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.5s forwards;
+    }
+
+    .hero-tagline {
+      font-family: var(--font-body);
+      font-size: clamp(1rem, 2.2vw, 1.25rem);
+      font-weight: 300;
+      font-style: italic;
+      color: rgba(237, 232, 223, 0.75);
+      margin-bottom: 2.75rem;
+      opacity: 0;
+      animation: fadeUp 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.7s forwards;
+    }
+
+    .hero-ctas {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+      opacity: 0;
+      animation: fadeUp 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.9s forwards;
+    }
+
+    .btn-primary {
+      display: inline-block;
+      font-family: var(--font-display);
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--bg);
+      background: var(--accent);
+      padding: 1rem 2rem;
+      border-radius: 2px;
+      transition: background 0.2s ease, transform 0.2s ease;
+    }
+
+    .btn-primary:hover {
+      background: #d9943f;
+      transform: translateY(-2px);
+    }
+
+    .btn-ghost {
+      display: inline-block;
+      font-family: var(--font-display);
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text);
+      border: 1px solid rgba(237, 232, 223, 0.35);
+      padding: 1rem 2rem;
+      border-radius: 2px;
+      transition: border-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+    }
+
+    .btn-ghost:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    .hero-scroll-indicator {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      opacity: 0;
+      animation: fadeIn 1s ease 1.4s forwards;
+    }
+
+    .hero-scroll-indicator span {
+      font-family: var(--font-display);
+      font-size: 0.6rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .scroll-line {
+      width: 1px;
+      height: 3rem;
+      background: linear-gradient(to bottom, var(--accent), transparent);
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 0.4; transform: scaleY(1); }
+      50%       { opacity: 1;   transform: scaleY(0.8); }
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    /* ==============================
+       STAT STRIP
+    ============================== */
+    .stat-strip {
+      background: var(--accent);
+      padding: 1rem 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 3rem;
+      flex-wrap: wrap;
+    }
+
+    .stat-strip-item {
+      font-family: var(--font-display);
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--bg);
+    }
+
+    .stat-strip-dot {
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: rgba(26, 23, 18, 0.4);
+    }
+
+    /* ==============================
+       SECTION BASE
+    ============================== */
+    section {
+      padding: 6rem 2.5rem;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .container-narrow {
+      max-width: 860px;
+      margin: 0 auto;
+    }
+
+    /* ==============================
+       PROPERTY SECTION
+    ============================== */
+    .property {
+      background: var(--bg);
+      padding: 7rem 2.5rem;
+    }
+
+    .property-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: center;
+    }
+
+    .property-image-wrap {
+      position: relative;
+    }
+
+    .property-image-wrap img {
+      width: 100%;
+      height: 520px;
+      object-fit: cover;
+      border-radius: 2px;
+    }
+
+    .property-image-accent {
+      position: absolute;
+      bottom: -1.5rem;
+      right: -1.5rem;
+      width: 180px;
+      height: 140px;
+      object-fit: cover;
+      border: 3px solid var(--bg);
+      border-radius: 2px;
+    }
+
+    .property-text h2 {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: clamp(2.2rem, 4vw, 3.2rem);
+      line-height: 1.1;
+      color: var(--text);
+      margin-bottom: 1.5rem;
+    }
+
+    .property-text p {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      line-height: 1.8;
+      margin-bottom: 1.25rem;
+    }
+
+    .property-text p:last-of-type {
+      margin-bottom: 0;
+    }
+
+    .property-divider {
+      width: 3rem;
+      height: 2px;
+      background: var(--accent);
+      margin-bottom: 1.75rem;
+    }
+
+    .property-features {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+      margin-top: 2rem;
+    }
+
+    .property-feature {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.6rem;
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      font-family: var(--font-display);
+      font-weight: 400;
+    }
+
+    .property-feature::before {
+      content: '—';
+      color: var(--accent);
+      flex-shrink: 0;
+      font-weight: 600;
+    }
+
+    /* ==============================
+       LODGE SECTION
+    ============================== */
+    .lodge {
+      background: var(--bg-secondary);
+      padding: 7rem 2.5rem;
+    }
+
+    .lodge-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .lodge-header {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+      margin-bottom: 4rem;
+    }
+
+    .lodge-header h2 {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: clamp(2.2rem, 4vw, 3.2rem);
+      line-height: 1.1;
+      color: var(--text);
+    }
+
+    .lodge-header-right {
+      padding-top: 1rem;
+    }
+
+    .lodge-header-right p {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      line-height: 1.8;
+      margin-bottom: 1rem;
+    }
+
+    .lodge-pullquote {
+      border-left: 2px solid var(--accent);
+      padding-left: 1.25rem;
+      margin-top: 1.75rem;
+      font-style: italic;
+      font-size: 1.05rem;
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .lodge-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: auto auto;
+      gap: 1rem;
+    }
+
+    .lodge-grid-item {
+      overflow: hidden;
+      border-radius: 2px;
+      background: var(--bg-card);
+    }
+
+    .lodge-grid-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .lodge-grid-item:hover img {
+      transform: scale(1.04);
+    }
+
+    .lodge-grid-item:nth-child(1) {
+      grid-column: 1 / 2;
+      grid-row: 1 / 2;
+      height: 280px;
+    }
+
+    .lodge-grid-item:nth-child(2) {
+      grid-column: 2 / 4;
+      grid-row: 1 / 2;
+      height: 280px;
+    }
+
+    .lodge-grid-item:nth-child(3) {
+      grid-column: 1 / 3;
+      grid-row: 2 / 3;
+      height: 220px;
+    }
+
+    .lodge-grid-item:nth-child(4) {
+      grid-column: 3 / 4;
+      grid-row: 2 / 3;
+      height: 220px;
+    }
+
+    .lodge-amenities {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+      margin-top: 3.5rem;
+      padding-top: 3rem;
+      border-top: 1px solid var(--rule);
+    }
+
+    .lodge-amenity {
+      text-align: center;
+    }
+
+    .lodge-amenity-number {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 2.5rem;
+      color: var(--accent);
+      line-height: 1;
+      margin-bottom: 0.4rem;
+    }
+
+    .lodge-amenity-label {
+      font-family: var(--font-display);
+      font-size: 0.78rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    /* ==============================
+       ACTIVITIES SECTION
+    ============================== */
+    .activities {
+      background: var(--bg);
+      padding: 7rem 2.5rem;
+    }
+
+    .activities-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .activities-header {
+      margin-bottom: 3.5rem;
+    }
+
+    .activities-header h2 {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: clamp(2.2rem, 4vw, 3.2rem);
+      line-height: 1.1;
+      color: var(--text);
+      margin-bottom: 0.75rem;
+    }
+
+    .activities-header p {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 520px;
+    }
+
+    .activities-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: var(--rule);
+      border: 1px solid var(--rule);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .activity-card {
+      background: var(--bg-card);
+      padding: 2.5rem 2rem 2.25rem;
+      transition: background 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .activity-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--accent);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .activity-card:hover {
+      background: #222016;
+    }
+
+    .activity-card:hover::after {
+      transform: scaleX(1);
+    }
+
+    .activity-card-photo {
+      width: calc(100% + 4rem);
+      margin: -2.5rem -2rem 1.75rem;
+      height: 160px;
+      object-fit: cover;
+      object-position: center 30%;
+      display: block;
+    }
+
+    .activity-num {
+      font-family: var(--font-display);
+      font-size: 0.72rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.5rem;
+    }
+
+    .activity-name {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 1.55rem;
+      line-height: 1.1;
+      color: var(--text);
+      margin-bottom: 1rem;
+    }
+
+    .activity-desc {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+    }
+
+    /* ==============================
+       RATES SECTION
+    ============================== */
+    .rates {
+      background: var(--bg-secondary);
+      padding: 7rem 2.5rem;
+    }
+
+    .rates-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .rates-header {
+      margin-bottom: 3.5rem;
+    }
+
+    .rates-header h2 {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: clamp(2.2rem, 4vw, 3.2rem);
+      line-height: 1.1;
+      color: var(--text);
+    }
+
+    .rates-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2.5rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .rates-card {
+      background: var(--bg-card);
+      border: 1px solid var(--rule);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .rates-card-header {
+      background: var(--bg);
+      padding: 1.5rem 2rem;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .rates-card-title {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 1.15rem;
+      letter-spacing: 0.04em;
+      color: var(--text);
+    }
+
+    .rates-card-sub {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 0.25rem;
+    }
+
+    .rates-table {
+      padding: 0.5rem 0;
+    }
+
+    .rates-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 2rem;
+      border-bottom: 1px solid rgba(200, 135, 58, 0.1);
+      transition: background 0.2s ease;
+    }
+
+    .rates-row:last-child {
+      border-bottom: none;
+    }
+
+    .rates-row:hover {
+      background: rgba(200, 135, 58, 0.04);
+    }
+
+    .rates-label {
+      font-family: var(--font-display);
+      font-size: 0.92rem;
+      color: var(--text);
+    }
+
+    .rates-sub-label {
+      display: block;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 0.15rem;
+      font-family: var(--font-body);
+    }
+
+    .rates-price {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 1.2rem;
+      color: var(--accent);
+    }
+
+    .rates-note {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+      max-width: 700px;
+      padding: 1.5rem;
+      background: var(--bg-card);
+      border-left: 2px solid var(--accent);
+      border-radius: 0 2px 2px 0;
+    }
+
+    .rates-testimonial {
+      margin-top: 3rem;
+      padding: 2.5rem;
+      background: var(--bg-card);
+      border-radius: 2px;
+      border: 1px solid var(--rule);
+    }
+
+    .rates-testimonial-text {
+      font-family: var(--font-body);
+      font-size: 1.1rem;
+      font-style: italic;
+      color: var(--text);
+      line-height: 1.7;
+      margin-bottom: 1rem;
+    }
+
+    .rates-testimonial-author {
+      font-family: var(--font-display);
+      font-size: 0.78rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    /* ==============================
+       LOCATION SECTION
+    ============================== */
+    .location {
+      background: var(--bg);
+      padding: 7rem 2.5rem;
+    }
+
+    .location-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .location-header {
+      margin-bottom: 3rem;
+    }
+
+    .location-header h2 {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: clamp(2.2rem, 4vw, 3.2rem);
+      line-height: 1.1;
+      color: var(--text);
+    }
+
+    .location-body {
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 3rem;
+      align-items: start;
+    }
+
+    .location-map {
+      border-radius: 2px;
+      overflow: hidden;
+      border: 1px solid var(--rule);
+      aspect-ratio: 16 / 10;
+    }
+
+    .location-map iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      filter: grayscale(30%) contrast(1.05) brightness(0.85) sepia(15%);
+      display: block;
+    }
+
+    .location-directions {
+      background: var(--bg-card);
+      border: 1px solid var(--rule);
+      border-radius: 2px;
+      padding: 2rem;
+    }
+
+    .directions-title {
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 0.78rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.25rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .direction-block {
+      margin-bottom: 1.5rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid rgba(200, 135, 58, 0.1);
+    }
+
+    .direction-block:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .direction-from {
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 0.82rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text);
+      margin-bottom: 0.6rem;
+    }
+
+    .direction-text {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+    }
+
+    .location-address {
+      margin-top: 1.5rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--rule);
+      font-family: var(--font-display);
+      font-size: 0.8rem;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* ==============================
+       CONTACT SECTION
+    ============================== */
+    .contact {
+      background: var(--bg-secondary);
+      padding: 7rem 2.5rem;
+    }
+
+    .contact-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: start;
+    }
+
+    .contact-left h2 {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: clamp(2.2rem, 4vw, 3.2rem);
+      line-height: 1.1;
+      color: var(--text);
+      margin-bottom: 1.25rem;
+    }
+
+    .contact-left p {
+      font-size: 1rem;
+      color: var(--text-muted);
+      line-height: 1.8;
+      margin-bottom: 2.5rem;
+    }
+
+    .contact-phone-block {
+      margin-bottom: 2rem;
+    }
+
+    .contact-phone-label {
+      font-family: var(--font-display);
+      font-size: 0.75rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+    }
+
+    .contact-phone-number {
+      display: block;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: clamp(2rem, 3.5vw, 2.8rem);
+      color: var(--text);
+      line-height: 1;
+      transition: color 0.2s ease;
+    }
+
+    .contact-phone-number:hover {
+      color: var(--accent);
+    }
+
+    .contact-phone-sub {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-top: 0.4rem;
+    }
+
+    /* Form */
+    .contact-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .form-label {
+      font-family: var(--font-display);
+      font-size: 0.75rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .form-input,
+    .form-textarea {
+      background: var(--bg-card);
+      border: 1px solid rgba(200, 135, 58, 0.2);
+      border-radius: 2px;
+      padding: 0.875rem 1rem;
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      color: var(--text);
+      transition: border-color 0.2s ease, background 0.2s ease;
+      outline: none;
+      width: 100%;
+    }
+
+    .form-input::placeholder,
+    .form-textarea::placeholder {
+      color: rgba(160, 149, 133, 0.45);
+    }
+
+    .form-input:focus,
+    .form-textarea:focus {
+      border-color: var(--accent);
+      background: rgba(200, 135, 58, 0.04);
+    }
+
+    .form-textarea {
+      resize: vertical;
+      min-height: 130px;
+    }
+
+    .btn-submit {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: var(--font-display);
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--bg);
+      background: var(--accent);
+      padding: 1.1rem 2.25rem;
+      border-radius: 2px;
+      border: none;
+      cursor: pointer;
+      align-self: flex-start;
+      transition: background 0.2s ease, transform 0.2s ease, opacity 0.2s ease;
+      min-height: 44px;
+    }
+
+    .btn-submit:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-submit .spinner {
+      width: 14px;
+      height: 14px;
+      border: 2px solid rgba(26, 23, 18, 0.3);
+      border-top-color: var(--bg);
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+      display: none;
+      flex-shrink: 0;
+    }
+
+    .btn-submit.loading .spinner {
+      display: block;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Form error & feedback states */
+    .form-error {
+      font-size: 0.8rem;
+      color: #e07055;
+      margin-top: 0.25rem;
+      display: none;
+      font-family: var(--font-display);
+    }
+
+    .form-group.has-error .form-input,
+    .form-group.has-error .form-textarea {
+      border-color: #e07055;
+    }
+
+    .form-group.has-error .form-error {
+      display: block;
+    }
+
+    .form-feedback {
+      display: none;
+      padding: 0.875rem 1.25rem;
+      border-radius: 2px;
+      font-size: 0.88rem;
+      font-family: var(--font-display);
+      letter-spacing: 0.04em;
+    }
+
+    .form-feedback[data-state="success"] {
+      display: block;
+      background: rgba(61, 84, 64, 0.2);
+      border: 1px solid var(--green);
+      color: #7fba84;
+    }
+
+    .form-feedback[data-state="error"] {
+      display: block;
+      background: rgba(224, 112, 85, 0.1);
+      border: 1px solid rgba(224, 112, 85, 0.4);
+      color: #e07055;
+    }
+
+    .btn-submit:hover {
+      background: #d9943f;
+      transform: translateY(-2px);
+    }
+
+    /* ==============================
+       FOOTER
+    ============================== */
+    .footer {
+      background: #0F0D0A;
+      border-top: 1px solid var(--rule-solid);
+      padding: 4rem 2.5rem 2.5rem;
+    }
+
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .footer-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 3rem;
+      padding-bottom: 3rem;
+      border-bottom: 1px solid var(--rule);
+      flex-wrap: wrap;
+      gap: 2rem;
+    }
+
+    .footer-brand {
+      max-width: 360px;
+    }
+
+    .footer-logo {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 1.8rem;
+      letter-spacing: 0.08em;
+      color: var(--text);
+      margin-bottom: 0.6rem;
+    }
+
+    .footer-tagline {
+      font-style: italic;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+      flex-wrap: wrap;
+    }
+
+    .footer-links a {
+      font-family: var(--font-display);
+      font-size: 0.78rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      transition: color 0.2s ease;
+    }
+
+    .footer-links a:hover {
+      color: var(--accent);
+    }
+
+    .footer-contact {
+      text-align: right;
+    }
+
+    .footer-contact-label {
+      font-family: var(--font-display);
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.4rem;
+    }
+
+    .footer-contact a {
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 1.2rem;
+      color: var(--text);
+      transition: color 0.2s ease;
+    }
+
+    .footer-contact a:hover {
+      color: var(--accent);
+    }
+
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .footer-copyright {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-family: var(--font-display);
+    }
+
+    .footer-location {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-family: var(--font-display);
+      letter-spacing: 0.08em;
+    }
+
+    /* ==============================
+       MOBILE NAV DRAWER
+    ============================== */
+    .nav-drawer {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 99;
+      background: rgba(15, 13, 10, 0.97);
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .nav-drawer.open {
+      pointer-events: all;
+      opacity: 1;
+    }
+
+    .nav-drawer a {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 2rem;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      transition: color 0.2s ease;
+    }
+
+    .nav-drawer a:hover {
+      color: var(--accent);
+    }
+
+    /* ==============================
+       RESPONSIVE
+    ============================== */
+    @media (max-width: 960px) {
+      .nav-links,
+      .nav-cta {
+        display: none;
+      }
+
+      .nav-mobile-toggle {
+        display: flex;
+      }
+
+      .nav-drawer {
+        display: flex;
+      }
+
+      .property-inner {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+      }
+
+      .property-image-accent {
+        display: none;
+      }
+
+      .lodge-header {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+
+      .lodge-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .lodge-grid-item:nth-child(1),
+      .lodge-grid-item:nth-child(2),
+      .lodge-grid-item:nth-child(3),
+      .lodge-grid-item:nth-child(4) {
+        grid-column: auto;
+        grid-row: auto;
+        height: 200px;
+      }
+
+      .lodge-amenities {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .activities-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .rates-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .location-body {
+        grid-template-columns: 1fr;
+      }
+
+      .contact-inner {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+      }
+
+      .footer-top {
+        flex-direction: column;
+      }
+
+      .footer-contact {
+        text-align: left;
+      }
+
+      .footer-bottom {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+
+    @media (max-width: 600px) {
+      section {
+        padding: 4rem 1.25rem;
+      }
+
+      .nav {
+        padding: 1rem 1.25rem;
+      }
+
+      .nav.scrolled {
+        padding: 0.75rem 1.25rem;
+      }
+
+      .stat-strip {
+        padding: 0.875rem 1.25rem;
+        gap: 1.5rem;
+      }
+
+      .stat-strip-dot {
+        display: none;
+      }
+
+      .activities-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+
+      .footer {
+        padding: 3rem 1.25rem 2rem;
+      }
+    }
+
+    /* ==============================
+       REDUCED MOTION
+    ============================== */
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+
+      .reveal {
+        opacity: 1;
+        transform: none;
+        transition: none;
+      }
+
+      .hero-bg {
+        animation: none;
+        transform: scale(1);
+      }
+
+      .scroll-line {
+        animation: none;
+      }
+
+      .btn-submit .spinner {
+        animation: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <!-- ==============================
+       NAVIGATION
+  ============================== -->
+  <nav class="nav" id="nav" role="navigation" aria-label="Main navigation">
+    <a href="#" class="nav-logo" aria-label="Yoberosa home">Yoberosa</a>
+
+    <ul class="nav-links" role="list">
+      <li><a href="#property">Property</a></li>
+      <li><a href="#lodge">Lodge</a></li>
+      <li><a href="#activities">Activities</a></li>
+      <li><a href="#rates">Rates</a></li>
+      <li><a href="#location">Location</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+
+    <a href="tel:6168931745" class="nav-cta" aria-label="Call us">Call Now</a>
+
+    <button class="nav-mobile-toggle" id="mobileToggle" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- Mobile Nav Drawer -->
+  <div class="nav-drawer" id="navDrawer" role="dialog" aria-modal="true" aria-label="Navigation menu">
+    <a href="#property" class="drawer-link">Property</a>
+    <a href="#lodge" class="drawer-link">Lodge</a>
+    <a href="#activities" class="drawer-link">Activities</a>
+    <a href="#rates" class="drawer-link">Rates</a>
+    <a href="#location" class="drawer-link">Location</a>
+    <a href="#contact" class="drawer-link">Contact</a>
+  </div>
+
+  <main id="main">
+
+  <!-- ==============================
+       HERO
+  ============================== -->
+  <section class="hero" id="hero" aria-label="Hero">
+    <div class="hero-bg" role="img" aria-label="Aerial view of Yoberosa property, Hesperia Michigan"></div>
+    <div class="hero-overlay" aria-hidden="true"></div>
+
+    <div class="hero-content">
+      <p class="hero-eyebrow">Hesperia, Michigan</p>
+      <h1 class="hero-title">Yoberosa</h1>
+      <p class="hero-tagline">300 Acres. Manistee National Forest. Yours.</p>
+      <div class="hero-ctas">
+        <a href="tel:6168931745" class="btn-primary">Call 616-893-1745</a>
+        <a href="#contact" class="btn-ghost">Inquire Online</a>
+      </div>
+    </div>
+
+    <div class="hero-scroll-indicator" aria-hidden="true">
+      <span>Explore</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- ==============================
+       STAT STRIP
+  ============================== -->
+  <div class="stat-strip" aria-label="Property highlights">
+    <span class="stat-strip-item">300 Acres</span>
+    <div class="stat-strip-dot" aria-hidden="true"></div>
+    <span class="stat-strip-item">Manistee National Forest</span>
+    <div class="stat-strip-dot" aria-hidden="true"></div>
+    <span class="stat-strip-item">Miles of Martin Creek</span>
+    <div class="stat-strip-dot" aria-hidden="true"></div>
+    <span class="stat-strip-item">7 Hunting Blinds</span>
+    <div class="stat-strip-dot" aria-hidden="true"></div>
+    <span class="stat-strip-item">Sleeps 20</span>
+  </div>
+
+  <!-- ==============================
+       PROPERTY
+  ============================== -->
+  <section class="property" id="property" aria-labelledby="property-heading">
+    <div class="property-inner">
+
+      <div class="property-image-wrap reveal">
+        <img
+          src="images/DSC00051.JPG"
+          alt="Yoberosa entrance sign and driveway leading to the lodge"
+          width="514" height="332"
+          loading="lazy"
+        />
+        <img
+          class="property-image-accent"
+          src="images/DSC00054.JPG"
+          alt="Lodge exterior with split-rail fence and meadow"
+          loading="lazy"
+        />
+      </div>
+
+      <div class="property-text">
+        <span class="section-label reveal reveal-delay-1">01 — The Property</span>
+        <div class="property-divider reveal reveal-delay-1"></div>
+        <h2 id="property-heading" class="reveal reveal-delay-2">Wild land, quiet roads, and cold, clear water.</h2>
+        <p class="reveal reveal-delay-3">
+          Nestled in the quiet community of Hesperia, Michigan, Yoberosa sits on 300 acres of beautiful wooded land surrounded by the Manistee National Forest. Miles of Martin Creek run through the property — cold, clean water filled with Brook and Brown Trout.
+        </p>
+        <p class="reveal reveal-delay-3">
+          The land also features its own beaver dam and a network of established trails for hiking, cross-country skiing, and snowmobiling. Seven dedicated hunting blinds are built throughout the property, positioned for small game and deer throughout the season.
+        </p>
+        <div class="property-features reveal reveal-delay-4">
+          <div class="property-feature">300 acres of wooded land</div>
+          <div class="property-feature">Brook &amp; Brown Trout fishing</div>
+          <div class="property-feature">Manistee National Forest</div>
+          <div class="property-feature">Beaver dam on-property</div>
+          <div class="property-feature">Hiking &amp; ski trails</div>
+          <div class="property-feature">7 established hunting blinds</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==============================
+       LODGE
+  ============================== -->
+  <section class="lodge" id="lodge" aria-labelledby="lodge-heading">
+    <div class="lodge-inner">
+
+      <div class="lodge-header">
+        <div>
+          <span class="section-label reveal">02 — The Lodge</span>
+          <h2 id="lodge-heading" class="reveal reveal-delay-1">Built for gathering. Made for the outdoors.</h2>
+        </div>
+        <div class="lodge-header-right">
+          <p class="reveal reveal-delay-2">
+            Yoberosa sleeps 20 comfortably across six bedrooms and a loft with four sets of bunk beds. The Great Room anchors the lodge — a wet bar, pool table, stone fireplace, and a big-screen TV with surround sound.
+          </p>
+          <p class="reveal reveal-delay-2">
+            Outside, a large deck overlooks the property and an outdoor hot tub that seats six keeps the cold nights comfortable. A full-service kitchen with restaurant-size refrigerator and double ovens, plus two full baths, rounds out everything you need.
+          </p>
+          <blockquote class="lodge-pullquote reveal reveal-delay-3">
+            "Perfect for meetings, family outings, parties, and receptions."
+          </blockquote>
+        </div>
+      </div>
+
+      <div class="lodge-grid reveal reveal-delay-2">
+        <div class="lodge-grid-item">
+          <img src="images/DSC00065.JPG" alt="Great Room with pool table and leather couches" loading="lazy" />
+        </div>
+        <div class="lodge-grid-item">
+          <img src="images/DSC00061.JPG" alt="Great Room with stone fireplace and trophy mounts" loading="lazy" />
+        </div>
+        <div class="lodge-grid-item">
+          <img src="images/DSC00049.JPG" alt="Lodge deck with hot tub" loading="lazy" />
+        </div>
+        <div class="lodge-grid-item">
+          <img src="images/DSC00079.JPG" alt="Full kitchen with dining tables" loading="lazy" />
+        </div>
+      </div>
+
+      <div class="lodge-amenities">
+        <div class="lodge-amenity reveal">
+          <div class="lodge-amenity-number">20</div>
+          <div class="lodge-amenity-label">Guests Comfortably</div>
+        </div>
+        <div class="lodge-amenity reveal reveal-delay-1">
+          <div class="lodge-amenity-number">6</div>
+          <div class="lodge-amenity-label">Bedrooms + Loft</div>
+        </div>
+        <div class="lodge-amenity reveal reveal-delay-2">
+          <div class="lodge-amenity-number">2</div>
+          <div class="lodge-amenity-label">Full Bathrooms</div>
+        </div>
+        <div class="lodge-amenity reveal reveal-delay-3">
+          <div class="lodge-amenity-number">6</div>
+          <div class="lodge-amenity-label">Person Hot Tub</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==============================
+       ACTIVITIES
+  ============================== -->
+  <section class="activities" id="activities" aria-labelledby="activities-heading">
+    <div class="activities-inner">
+
+      <div class="activities-header">
+        <span class="section-label reveal">03 — Activities</span>
+        <h2 id="activities-heading" class="reveal reveal-delay-1">Four seasons of something worth doing.</h2>
+        <p class="reveal reveal-delay-2">The land does the work. You just have to show up.</p>
+      </div>
+
+      <div class="activities-grid">
+
+        <div class="activity-card reveal">
+          <p class="activity-num">01</p>
+          <h3 class="activity-name">Fishing</h3>
+          <p class="activity-desc">Miles of Martin Creek run cold and clear through the property, carrying Brook and Brown Trout. Gear up and wade in.</p>
+        </div>
+
+        <div class="activity-card reveal reveal-delay-1">
+          <img src="images/gunhunter.jpg" alt="Hunter aiming rifle in camouflage" class="activity-card-photo" loading="lazy" />
+          <p class="activity-num">02</p>
+          <h3 class="activity-name">Hunting</h3>
+          <p class="activity-desc">Seven established blinds throughout 300 acres of deep woods. Prime small game and deer territory, year after year.</p>
+        </div>
+
+        <div class="activity-card reveal reveal-delay-2">
+          <p class="activity-num">03</p>
+          <h3 class="activity-name">Hiking</h3>
+          <p class="activity-desc">Maintained trails wind through wooded land bordering the Manistee National Forest — no two walks the same.</p>
+        </div>
+
+        <div class="activity-card reveal reveal-delay-3">
+          <p class="activity-num">04</p>
+          <h3 class="activity-name">Snow & Ice</h3>
+          <p class="activity-desc">The same trails that carry hikers in summer become cross-country ski runs and snowmobile paths in winter.</p>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==============================
+       RATES
+  ============================== -->
+  <section class="rates" id="rates" aria-labelledby="rates-heading">
+    <div class="rates-inner">
+
+      <div class="rates-header">
+        <span class="section-label reveal">04 — Rates</span>
+        <h2 id="rates-heading" class="reveal reveal-delay-1">Straightforward pricing, no surprises.</h2>
+      </div>
+
+      <div class="rates-grid">
+
+        <!-- General Rates -->
+        <div class="rates-card reveal">
+          <div class="rates-card-header">
+            <div class="rates-card-title">General Rental</div>
+            <div class="rates-card-sub">Based on 10-person occupancy. Call for larger groups.</div>
+          </div>
+          <div class="rates-table">
+            <div class="rates-row">
+              <div class="rates-label">
+                Weekly
+                <span class="rates-sub-label">Friday to Friday</span>
+              </div>
+              <div class="rates-price">$1,000</div>
+            </div>
+            <div class="rates-row">
+              <div class="rates-label">
+                Weekend
+                <span class="rates-sub-label">Friday to Sunday</span>
+              </div>
+              <div class="rates-price">$650</div>
+            </div>
+            <div class="rates-row">
+              <div class="rates-label">
+                Daily — Weekday
+                <span class="rates-sub-label">Per night</span>
+              </div>
+              <div class="rates-price">$150</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hunting Rates -->
+        <div class="rates-card reveal reveal-delay-1">
+          <div class="rates-card-header">
+            <div class="rates-card-title">Hunting Season</div>
+            <div class="rates-card-sub">Seasonal rates for licensed hunters.</div>
+          </div>
+          <div class="rates-table">
+            <div class="rates-row">
+              <div class="rates-label">Youth Firearm</div>
+              <div class="rates-price">$700</div>
+            </div>
+            <div class="rates-row">
+              <div class="rates-label">
+                Bow Season
+                <span class="rates-sub-label">Weekend / Week</span>
+              </div>
+              <div class="rates-price">$750 / $1,100</div>
+            </div>
+            <div class="rates-row">
+              <div class="rates-label">
+                Rifle Season
+                <span class="rates-sub-label">Opening week</span>
+              </div>
+              <div class="rates-price">$4,800</div>
+            </div>
+            <div class="rates-row">
+              <div class="rates-label">
+                Rifle Season
+                <span class="rates-sub-label">Second weekend</span>
+              </div>
+              <div class="rates-price">$1,500</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="rates-note reveal">
+        <strong>Booking Policy:</strong> A $150 non-refundable deposit is required within one week of reservation. Full rental fee is due 30 days prior to arrival.
+      </div>
+
+      <div class="rates-testimonial reveal reveal-delay-1">
+        <p class="rates-testimonial-text">
+          "I would most definitely recommend Yoberosa as a place to relax and enjoy yourself, as well as to entertain your friends, family, or associates."
+        </p>
+        <div class="rates-testimonial-author">— Steve Rector</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==============================
+       LOCATION
+  ============================== -->
+  <section class="location" id="location" aria-labelledby="location-heading">
+    <div class="location-inner">
+
+      <div class="location-header">
+        <span class="section-label reveal">05 — Location</span>
+        <h2 id="location-heading" class="reveal reveal-delay-1">Deep in the forest. Easy to find.</h2>
+      </div>
+
+      <div class="location-body">
+
+        <div class="location-map reveal reveal-delay-1" aria-label="Map of Yoberosa location near Hesperia, Michigan">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d46577.02!2d-85.9959!3d43.5645!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x881b0451e73e0f5b%3A0xe6a5b9a17f7e1a57!2sHesperia%2C+MI+49421!5e0!3m2!1sen!2sus!4v1699900000000!5m2!1sen!2sus"
+            title="Map showing Yoberosa location near Hesperia, Michigan"
+            allowfullscreen=""
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+          ></iframe>
+        </div>
+
+        <div class="location-directions reveal reveal-delay-2">
+          <div class="directions-title">Directions to Yoberosa</div>
+
+          <div class="direction-block">
+            <div class="direction-from">From the West / Lakeshore</div>
+            <p class="direction-text">
+              Take US-31 North (or South) to M-20. Head east approximately 17 miles into Hesperia. Continue through town on M-20 for 3 miles to Green Road. Turn left (north) on Green, travel 2 miles to Monroe Road — the first gravel road on the right after the White River bridge.
+            </p>
+          </div>
+
+          <div class="direction-block">
+            <div class="direction-from">Final Approach</div>
+            <p class="direction-text">
+              The Yoberosa driveway is on Green Street, 100 yards north of Monroe on the right. Look for the small Yoberosa street sign. Follow the two-track approximately ½ mile to the lodge.
+            </p>
+          </div>
+
+          <div class="direction-block">
+            <div class="direction-from">From M-37</div>
+            <p class="direction-text">
+              Head north on M-37 toward Hesperia, then follow local signs to Green Road.
+            </p>
+          </div>
+
+          <div class="location-address">
+            Green Street at Monroe Road<br />
+            Hesperia, Michigan 49421<br />
+            <br />
+            <a href="tel:6168931745" style="color: var(--accent); transition: opacity 0.2s;">616-893-1745</a>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==============================
+       CONTACT
+  ============================== -->
+  <section class="contact" id="contact" aria-labelledby="contact-heading">
+    <div class="contact-inner">
+
+      <div class="contact-left">
+        <span class="section-label reveal">06 — Reservations</span>
+        <h2 id="contact-heading" class="reveal reveal-delay-1">Ready when you are.</h2>
+        <p class="reveal reveal-delay-2">
+          For the fastest response, give us a call. For questions or to check availability, send a message below and we'll get back to you shortly.
+        </p>
+
+        <div class="contact-phone-block reveal reveal-delay-3">
+          <div class="contact-phone-label">Call Direct</div>
+          <a href="tel:6168931745" class="contact-phone-number">616-893-1745</a>
+          <div class="contact-phone-sub">Available for reservations &amp; inquiries</div>
+        </div>
+      </div>
+
+      <form
+        class="contact-form reveal reveal-delay-2"
+        id="contactForm"
+        aria-label="Contact and reservation inquiry form"
+        novalidate
+      >
+        <div class="form-row">
+          <div class="form-group" id="group-name">
+            <label class="form-label" for="name">Name <span aria-hidden="true">*</span></label>
+            <input class="form-input" type="text" id="name" name="name" placeholder="Your name" required aria-required="true" autocomplete="name" aria-describedby="error-name" />
+            <span class="form-error" id="error-name" role="alert">Please enter your name.</span>
+          </div>
+          <div class="form-group" id="group-email">
+            <label class="form-label" for="email">Email <span aria-hidden="true">*</span></label>
+            <input class="form-input" type="email" id="email" name="email" placeholder="your@email.com" required aria-required="true" autocomplete="email" aria-describedby="error-email" />
+            <span class="form-error" id="error-email" role="alert">Please enter a valid email address.</span>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="phone">Phone</label>
+            <input class="form-input" type="tel" id="phone" name="phone" placeholder="(000) 000-0000" autocomplete="tel" />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="dates">Dates of Interest</label>
+            <input class="form-input" type="text" id="dates" name="dates" placeholder="e.g. Aug 15 – 20" autocomplete="off" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="message">Message</label>
+          <textarea class="form-textarea" id="message" name="message" placeholder="Tell us about your group, questions, or what you have in mind…"></textarea>
+        </div>
+
+        <div class="form-feedback" id="formFeedback" role="status" aria-live="polite"></div>
+
+        <button type="submit" class="btn-submit">
+          <span class="spinner" aria-hidden="true"></span>
+          <span class="btn-text">Send Inquiry</span>
+        </button>
+      </form>
+
+    </div>
+  </section>
+
+  </main><!-- /#main -->
+
+  <!-- ==============================
+       FOOTER
+  ============================== -->
+  <footer class="footer" aria-label="Site footer">
+    <div class="footer-inner">
+
+      <div class="footer-top">
+        <div class="footer-brand">
+          <div class="footer-logo">Yoberosa</div>
+          <div class="footer-tagline">300 Acres. Manistee National Forest. Yours.</div>
+        </div>
+
+        <ul class="footer-links" role="list">
+          <li><a href="#property">Property</a></li>
+          <li><a href="#lodge">Lodge</a></li>
+          <li><a href="#activities">Activities</a></li>
+          <li><a href="#rates">Rates</a></li>
+          <li><a href="#location">Location</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+
+        <div class="footer-contact">
+          <div class="footer-contact-label">Reservations</div>
+          <a href="tel:6168931745">616-893-1745</a>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div class="footer-copyright">© Chuck Yob, Jr. · Yoberosa</div>
+        <div class="footer-location">Hesperia, Michigan · Manistee National Forest</div>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- ==============================
+       JAVASCRIPT
+  ============================== -->
+  <script>
+    // ——— Nav scroll behavior ———
+    const nav = document.getElementById('nav');
+    const hero = document.getElementById('hero');
+
+    function updateNav() {
+      const scrolled = window.scrollY > hero.offsetHeight * 0.5;
+      nav.classList.toggle('scrolled', scrolled);
+    }
+
+    window.addEventListener('scroll', updateNav, { passive: true });
+    updateNav();
+
+    // ——— Scroll reveal ———
+    const revealEls = document.querySelectorAll('.reveal');
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold: 0.12,
+      rootMargin: '0px 0px -40px 0px'
+    });
+
+    revealEls.forEach(el => observer.observe(el));
+
+    // ——— Mobile nav toggle + focus trap ———
+    const toggle = document.getElementById('mobileToggle');
+    const drawer = document.getElementById('navDrawer');
+    const navEl  = document.getElementById('nav');
+
+    const focusableSelectors = 'a[href], button:not([disabled])';
+
+    function openDrawer() {
+      drawer.classList.add('open');
+      navEl.classList.add('nav-mobile-open');
+      toggle.setAttribute('aria-expanded', 'true');
+      document.body.style.overflow = 'hidden';
+      const firstFocusable = drawer.querySelector(focusableSelectors);
+      if (firstFocusable) firstFocusable.focus();
+    }
+
+    function closeDrawer() {
+      drawer.classList.remove('open');
+      navEl.classList.remove('nav-mobile-open');
+      toggle.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+      toggle.focus();
+    }
+
+    toggle.addEventListener('click', () => {
+      drawer.classList.contains('open') ? closeDrawer() : openDrawer();
+    });
+
+    // Close on link click
+    drawer.querySelectorAll('.drawer-link').forEach(link => {
+      link.addEventListener('click', closeDrawer);
+    });
+
+    // Close on Escape; focus trap on Tab
+    document.addEventListener('keydown', (e) => {
+      if (!drawer.classList.contains('open')) return;
+
+      if (e.key === 'Escape') {
+        closeDrawer();
+        return;
+      }
+
+      if (e.key === 'Tab') {
+        const focusable = [...drawer.querySelectorAll(focusableSelectors)];
+        if (!focusable.length) return;
+        const first = focusable[0];
+        const last  = focusable[focusable.length - 1];
+
+        if (e.shiftKey) {
+          if (document.activeElement === first) {
+            e.preventDefault();
+            last.focus();
+          }
+        } else {
+          if (document.activeElement === last) {
+            e.preventDefault();
+            first.focus();
+          }
+        }
+      }
+    });
+
+    // ——— Form validation + submit handler ———
+    const form     = document.getElementById('contactForm');
+    const feedback = document.getElementById('formFeedback');
+
+    function validateField(input) {
+      const group = input.closest('.form-group');
+      if (!group) return true;
+
+      let valid = true;
+
+      if (input.required && !input.value.trim()) {
+        valid = false;
+      } else if (input.type === 'email' && input.value.trim()) {
+        valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.value.trim());
+      }
+
+      group.classList.toggle('has-error', !valid);
+      return valid;
+    }
+
+    // Validate on blur (not on every keystroke)
+    form.querySelectorAll('.form-input, .form-textarea').forEach(input => {
+      input.addEventListener('blur', () => {
+        if (input.required || (input.type === 'email' && input.value.trim())) {
+          validateField(input);
+        }
+      });
+      // Clear error once user starts fixing the field
+      input.addEventListener('input', () => {
+        if (input.closest('.form-group').classList.contains('has-error')) {
+          validateField(input);
+        }
+      });
+    });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const requiredInputs = [...form.querySelectorAll('[required]')];
+      const allValid = requiredInputs.every(validateField);
+
+      if (!allValid) {
+        const firstError = form.querySelector('.form-group.has-error input, .form-group.has-error textarea');
+        if (firstError) firstError.focus();
+        return;
+      }
+
+      const btn     = form.querySelector('.btn-submit');
+      const btnText = btn.querySelector('.btn-text');
+
+      btn.disabled = true;
+      btn.classList.add('loading');
+      btnText.textContent = 'Sending…';
+      feedback.removeAttribute('data-state');
+      feedback.textContent = '';
+
+      // Simulate send (replace with real fetch when backend is ready)
+      await new Promise(resolve => setTimeout(resolve, 1800));
+
+      btn.disabled = false;
+      btn.classList.remove('loading');
+      btnText.textContent = 'Send Inquiry';
+
+      feedback.setAttribute('data-state', 'success');
+      feedback.textContent = 'Message sent — we\'ll be in touch shortly.';
+      form.reset();
+
+      // Clear feedback after 6s
+      setTimeout(() => {
+        feedback.removeAttribute('data-state');
+        feedback.textContent = '';
+      }, 6000);
+    });
+  </script>
+
+</body>
+</html>
