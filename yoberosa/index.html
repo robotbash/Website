@@ -187,6 +187,9 @@
     }
 
     .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
       font-family: var(--font-display);
       font-weight: 700;
       font-size: 1.1rem;
@@ -196,6 +199,14 @@
       opacity: 0;
       transform: translateY(-8px);
       transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+
+    .nav-logo img {
+      height: 38px;
+      width: 38px;
+      border-radius: 50%;
+      object-fit: cover;
+      flex-shrink: 0;
     }
 
     .nav.scrolled .nav-logo,
@@ -292,7 +303,7 @@
     .hero-bg {
       position: absolute;
       inset: 0;
-      background-image: url('images/DSC00050.JPG');
+      background-image: url('images/picture_001.jpg');
       background-size: cover;
       background-position: center 40%;
       transform: scale(1.06);
@@ -1315,12 +1326,23 @@
     }
 
     .footer-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
       font-family: var(--font-display);
       font-weight: 700;
       font-size: 1.8rem;
       letter-spacing: 0.08em;
       color: var(--text);
       margin-bottom: 0.6rem;
+    }
+
+    .footer-logo img {
+      height: 64px;
+      width: 64px;
+      border-radius: 50%;
+      object-fit: cover;
+      flex-shrink: 0;
     }
 
     .footer-tagline {
@@ -1589,7 +1611,10 @@
        NAVIGATION
   ============================== -->
   <nav class="nav" id="nav" role="navigation" aria-label="Main navigation">
-    <a href="#" class="nav-logo" aria-label="Yoberosa home">Yoberosa</a>
+    <a href="#" class="nav-logo" aria-label="Yoberosa home">
+      <img src="images/logo.jpg" alt="" aria-hidden="true" />
+      Yoberosa
+    </a>
 
     <ul class="nav-links" role="list">
       <li><a href="#property">Property</a></li>
@@ -1665,15 +1690,15 @@
 
       <div class="property-image-wrap reveal">
         <img
-          src="images/DSC00051.JPG"
-          alt="Yoberosa entrance sign and driveway leading to the lodge"
+          src="images/picture_026.jpg"
+          alt="Yoberosa lodge exterior with meadow and trees"
           width="514" height="332"
           loading="lazy"
         />
         <img
           class="property-image-accent"
-          src="images/DSC00054.JPG"
-          alt="Lodge exterior with split-rail fence and meadow"
+          src="images/picture_002.jpg"
+          alt="Martin Creek running through the Yoberosa property"
           loading="lazy"
         />
       </div>
@@ -1777,6 +1802,7 @@
       <div class="activities-grid">
 
         <div class="activity-card reveal">
+          <img src="images/picture_003.jpg" alt="Martin Creek winding through wooded forest" class="activity-card-photo" loading="lazy" />
           <p class="activity-num">01</p>
           <h3 class="activity-name">Fishing</h3>
           <p class="activity-desc">Miles of Martin Creek run cold and clear through the property, carrying Brook and Brown Trout. Gear up and wade in.</p>
@@ -1796,6 +1822,7 @@
         </div>
 
         <div class="activity-card reveal reveal-delay-3">
+          <img src="images/snowmobile.jpg" alt="Snowmobiler racing through deep powder" class="activity-card-photo" loading="lazy" />
           <p class="activity-num">04</p>
           <h3 class="activity-name">Snow & Ice</h3>
           <p class="activity-desc">The same trails that carry hikers in summer become cross-country ski runs and snowmobile paths in winter.</p>
@@ -2037,7 +2064,10 @@
 
       <div class="footer-top">
         <div class="footer-brand">
-          <div class="footer-logo">Yoberosa</div>
+          <div class="footer-logo">
+            <img src="images/logo.jpg" alt="Yoberosa Lodge logo" />
+            Yoberosa
+          </div>
           <div class="footer-tagline">300 Acres. Manistee National Forest. Yours.</div>
         </div>
 
