@@ -196,23 +196,20 @@
       letter-spacing: 0.12em;
       text-transform: uppercase;
       color: var(--text);
-      opacity: 0;
-      transform: translateY(-8px);
-      transition: opacity 0.4s ease, transform 0.4s ease;
+      opacity: 1;
+      transition: opacity 0.4s ease;
     }
 
     .nav-logo img {
-      height: 38px;
-      width: 38px;
+      height: 48px;
+      width: 48px;
       border-radius: 50%;
       object-fit: cover;
       flex-shrink: 0;
     }
 
-    .nav.scrolled .nav-logo,
     .nav-logo:focus-visible {
       opacity: 1;
-      transform: translateY(0);
     }
 
     .nav-links {
@@ -1338,8 +1335,8 @@
     }
 
     .footer-logo img {
-      height: 64px;
-      width: 64px;
+      height: 96px;
+      width: 96px;
       border-radius: 50%;
       object-fit: cover;
       flex-shrink: 0;
@@ -1816,6 +1813,7 @@
         </div>
 
         <div class="activity-card reveal reveal-delay-2">
+          <img src="images/hiking.jpg" alt="Hiker overlooking a river bend through the forest" class="activity-card-photo" loading="lazy" />
           <p class="activity-num">03</p>
           <h3 class="activity-name">Hiking</h3>
           <p class="activity-desc">Maintained trails wind through wooded land bordering the Manistee National Forest — no two walks the same.</p>
