@@ -4,6 +4,20 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Yoberosa — Hesperia, Michigan</title>
+
+  <!-- Favicon -->
+  <link rel="icon" href="images/logo.jpg" type="image/jpeg" />
+
+  <!-- SEO & Open Graph -->
+  <meta name="description" content="300 acres of private wooded land in Michigan's Manistee National Forest. Miles of Martin Creek trout fishing, 7 hunting blinds, and a full lodge sleeping 20. Hesperia, Michigan." />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Yoberosa Lodge — Hesperia, Michigan" />
+  <meta property="og:description" content="300 acres. Manistee National Forest. Miles of Martin Creek, 7 hunting blinds, lodge sleeps 20." />
+  <meta property="og:image" content="images/picture_001.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Yoberosa Lodge — Hesperia, Michigan" />
+  <meta name="twitter:image" content="images/picture_001.jpg" />
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Zilla+Slab:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,300;1,8..60,400&display=swap" rel="stylesheet" />
@@ -318,7 +332,7 @@
       background: linear-gradient(
         180deg,
         rgba(20, 17, 12, 0.2) 0%,
-        rgba(20, 17, 12, 0.55) 50%,
+        rgba(20, 17, 12, 0.65) 50%,
         rgba(20, 17, 12, 0.85) 100%
       );
     }
@@ -659,6 +673,7 @@
       grid-template-columns: repeat(3, 1fr);
       grid-template-rows: auto auto;
       gap: 1rem;
+      max-width: 1100px;
     }
 
     .lodge-grid-item {
@@ -1563,6 +1578,11 @@
       .footer {
         padding: 3rem 1.25rem 2rem;
       }
+
+      .footer-logo img {
+        height: 64px;
+        width: 64px;
+      }
     }
 
     /* ==============================
@@ -1631,6 +1651,7 @@
 
   <!-- Mobile Nav Drawer -->
   <div class="nav-drawer" id="navDrawer" role="dialog" aria-modal="true" aria-label="Navigation menu">
+    <img src="images/logo.jpg" alt="Yoberosa Lodge" style="height:80px;width:80px;border-radius:50%;object-fit:cover;margin-bottom:0.5rem;" />
     <a href="#property" class="drawer-link">Property</a>
     <a href="#lodge" class="drawer-link">Lodge</a>
     <a href="#activities" class="drawer-link">Activities</a>
@@ -2260,6 +2281,19 @@
         feedback.textContent = '';
       }, 6000);
     });
+
+    // ——— Smooth-scroll polyfill for browsers without CSS scroll-behavior ———
+    if (!('scrollBehavior' in document.documentElement.style)) {
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+          const target = document.querySelector(this.getAttribute('href'));
+          if (target) {
+            e.preventDefault();
+            target.scrollIntoView({ behavior: 'smooth' });
+          }
+        });
+      });
+    }
   </script>
 
 </body>
