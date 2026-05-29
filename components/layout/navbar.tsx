@@ -25,6 +25,7 @@ const employeeLinks = [
 const adminLinks = [
   { href: '/admin', label: 'Overview', icon: LayoutDashboard },
   { href: '/admin/employees', label: 'Employees', icon: Users },
+  { href: '/admin/pto', label: 'PTO Requests', icon: Calendar },
   { href: '/admin/corrections', label: 'Corrections', icon: FileText },
   { href: '/admin/holidays', label: 'Holidays', icon: Calendar },
   { href: '/admin/announcements', label: 'Announcements', icon: Shield },

@@ -3,7 +3,7 @@ import { createClient } from '@/lib/supabase/server'
 import { createClient as adminClient } from '@supabase/supabase-js'
 import { adminPtoSchema } from '@/lib/validations/pto'
 import { logAudit } from '@/lib/audit'
-import { differenceInCalendarDays, parseISO } from 'date-fns'
+import { eachDayOfInterval, isWeekend, parseISO } from 'date-fns'
 
 async function requireAdmin() {
   const supabase = await createClient()
@@ -31,8 +31,10 @@ export async function POST(req: NextRequest) {
   }
 
   const { userId, startDate, endDate, hoursPerDay, note } = parsed.data
-  const days = differenceInCalendarDays(parseISO(endDate), parseISO(startDate)) + 1
-  const totalHours = days * hoursPerDay
+  // Count business days only — keeps this consistent with the employee request route.
+  const businessDays = eachDayOfInterval({ start: parseISO(startDate), end: parseISO(endDate) })
+    .filter((d) => !isWeekend(d)).length
+  const totalHours = businessDays * hoursPerDay
 
   const admin = adminClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -48,6 +50,7 @@ export async function POST(req: NextRequest) {
 
   if (!targetUser) return NextResponse.json({ error: 'User not found' }, { status: 404 })
 
+  // Admin-created PTO is auto-approved and deducted immediately.
   const { data: entry, error } = await admin
     .from('pto_entries')
     .insert({
@@ -57,6 +60,9 @@ export async function POST(req: NextRequest) {
       hours: totalHours,
       note: note ?? null,
       logged_by_user_id: adminUser.id,
+      status: 'approved',
+      reviewed_by: adminUser.id,
+      reviewed_at: new Date().toISOString(),
     })
     .select()
     .single()

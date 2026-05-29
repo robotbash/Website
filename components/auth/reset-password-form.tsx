@@ -8,7 +8,6 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
-import { createClient } from '@/lib/supabase/client'
 
 const REQUIREMENTS = 'At least 10 characters, one letter, and one number.'
 
@@ -18,7 +17,6 @@ export function ResetPasswordForm() {
   const [confirm, setConfirm] = useState('')
   const [showPw, setShowPw] = useState(false)
   const [loading, setLoading] = useState(false)
-  const supabase = createClient()
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -33,16 +31,20 @@ export function ResetPasswordForm() {
     }
 
     setLoading(true)
-    const { error } = await supabase.auth.updateUser({ password })
+    // Single server-side call changes the password AND clears the forced-reset flag
+    // atomically — the flag cannot be cleared without a real password update.
+    const res = await fetch('/api/auth/reset-password', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password }),
+    })
+    const data = await res.json().catch(() => ({}))
 
-    if (error) {
-      toast.error(error.message)
+    if (!res.ok) {
+      toast.error(data.error ?? 'Something went wrong')
       setLoading(false)
       return
     }
-
-    // Clear force_password_reset flag
-    await fetch('/api/auth/clear-force-reset', { method: 'POST' })
 
     toast.success('Password updated. Signing you in.')
     router.push('/')

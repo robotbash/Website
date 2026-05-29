@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { ptoRequestSchema } from '@/lib/validations/pto'
 import { logAudit } from '@/lib/audit'
-import { differenceInCalendarDays, parseISO } from 'date-fns'
+import { eachDayOfInterval, isWeekend, parseISO } from 'date-fns'
 
 export async function GET() {
   const supabase = await createClient()
@@ -35,9 +35,10 @@ export async function POST(req: NextRequest) {
 
   const { startDate, endDate, hoursPerDay, note } = parsed.data
 
-  // Calculate total hours
-  const days = differenceInCalendarDays(parseISO(endDate), parseISO(startDate)) + 1
-  const totalHours = days * hoursPerDay
+  // Count only business days (server-side, so client can't manipulate this)
+  const businessDays = eachDayOfInterval({ start: parseISO(startDate), end: parseISO(endDate) })
+    .filter((d) => !isWeekend(d)).length
+  const totalHours = businessDays * hoursPerDay
 
   // Check balance
   const { data: userRow } = await supabase
@@ -57,6 +58,9 @@ export async function POST(req: NextRequest) {
     )
   }
 
+  // Create the request as PENDING. The balance is NOT deducted here —
+  // a manager must approve the request first (see the admin PTO route).
+  // RLS additionally enforces that employees can only insert pending rows.
   const { data: entry, error } = await supabase
     .from('pto_entries')
     .insert({
@@ -66,17 +70,12 @@ export async function POST(req: NextRequest) {
       hours: totalHours,
       note: note ?? null,
       logged_by_user_id: user.id,
+      status: 'pending',
     })
     .select()
     .single()
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
-
-  // Deduct from balance
-  await supabase
-    .from('users')
-    .update({ pto_balance: userRow.pto_balance - totalHours })
-    .eq('id', user.id)
 
   await logAudit({
     userId: user.id,
@@ -84,7 +83,7 @@ export async function POST(req: NextRequest) {
     targetUserId: user.id,
     targetRecordId: entry.id,
     tableName: 'pto_entries',
-    newValue: { start_date: startDate, end_date: endDate, hours: totalHours },
+    newValue: { start_date: startDate, end_date: endDate, hours: totalHours, status: 'pending' },
     ipAddress: req.headers.get('x-forwarded-for')?.split(',')[0] ?? null,
   })
 

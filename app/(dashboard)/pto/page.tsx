@@ -1,9 +1,16 @@
 import type { Metadata } from 'next'
 import { createClient } from '@/lib/supabase/server'
 import { Card, CardContent } from '@/components/ui/card'
+import { Badge } from '@/components/ui/badge'
 import { PtoRequestForm } from '@/components/dashboard/pto-request-form'
-import { formatDate, formatHours } from '@/lib/utils'
+import { formatDate, formatPtoDays } from '@/lib/utils'
 import type { PtoEntry } from '@/lib/supabase/types'
+
+const STATUS_BADGE: Record<string, { label: string; variant: 'success' | 'destructive' | 'warning' }> = {
+  approved: { label: 'Approved', variant: 'success' },
+  denied: { label: 'Denied', variant: 'destructive' },
+  pending: { label: 'Pending', variant: 'warning' },
+}
 
 export const metadata: Metadata = { title: 'PTO' }
 export const dynamic = 'force-dynamic'
@@ -27,14 +34,22 @@ export default async function PtoPage() {
 
   const balance = userRow?.pto_balance ?? 0
   const annualHours = userRow?.annual_pto_hours ?? 0
+  const pendingHours = (entries ?? [])
+    .filter((e) => e.status === 'pending')
+    .reduce((sum, e) => sum + Number(e.hours), 0)
 
   return (
     <div className="container max-w-2xl mx-auto px-4 py-6 space-y-6">
       <div>
         <h1 className="text-2xl font-bold">PTO</h1>
         <p className="text-muted-foreground">
-          Balance: <strong>{formatHours(balance)}</strong> of {formatHours(annualHours)} remaining
+          Balance: <strong>{formatPtoDays(balance)}</strong> of {formatPtoDays(annualHours)} remaining
         </p>
+        {pendingHours > 0 && (
+          <p className="text-sm text-muted-foreground">
+            {formatPtoDays(pendingHours)} awaiting manager approval (deducted once approved)
+          </p>
+        )}
       </div>
 
       <PtoRequestForm balance={balance} />
@@ -57,7 +72,7 @@ export default async function PtoPage() {
                       <p className="font-medium">{formatDate(e.start_date)} — {formatDate(e.end_date)}</p>
                       {e.note && <p className="text-sm text-muted-foreground">{e.note}</p>}
                     </div>
-                    <p className="font-semibold shrink-0">{formatHours(e.hours)}</p>
+                    <p className="font-semibold shrink-0">{formatPtoDays(e.hours)}</p>
                   </div>
                 </CardContent>
               </Card>

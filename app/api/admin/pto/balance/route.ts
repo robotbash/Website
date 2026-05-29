@@ -5,6 +5,7 @@ import { ptoBalanceAdjustSchema } from '@/lib/validations/pto'
 import { logAudit } from '@/lib/audit'
 
 export async function POST(req: NextRequest) {
+  try {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
@@ -55,4 +56,8 @@ export async function POST(req: NextRequest) {
   })
 
   return NextResponse.json({ newBalance })
+  } catch (err) {
+    console.error('[balance route] Error:', err)
+    return NextResponse.json({ error: String(err) }, { status: 500 })
+  }
 }

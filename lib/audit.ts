@@ -19,6 +19,8 @@ export type AuditAction =
   | 'correction_approved'
   | 'correction_denied'
   | 'pto_requested'
+  | 'pto_approved'
+  | 'pto_denied'
   | 'pto_adjusted'
   | 'pto_deleted'
   | 'sick_day_logged'

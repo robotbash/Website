@@ -45,6 +45,10 @@ export interface PtoEntry {
   hours: number
   note: string | null
   logged_by_user_id: string
+  status: CorrectionStatus
+  reviewed_by: string | null
+  reviewed_at: string | null
+  admin_notes: string | null
   created_at: string
 }
 
@@ -152,23 +156,51 @@ export interface Settings {
   overtime_warning: number
 }
 
+// Each table exposes Row, Insert, Update, and Relationships.
+// Supabase-js v2 requires all four keys for its generic type resolution.
+// TODO: replace with auto-generated types via:
+//   npx supabase gen types typescript --project-id oucwersccrbklhtollmm > lib/supabase/types.ts
+// That will eliminate the widespread `never` compile-time errors on .select() results.
+type TableDef<T> = {
+  Row: T
+  Insert: Partial<T>
+  Update: Partial<T>
+  Relationships: {
+    foreignKeyName: string
+    columns: string[]
+    isOneToOne: boolean
+    referencedRelation: string
+    referencedColumns: string[]
+  }[]
+}
+
 export type Database = {
   public: {
     Tables: {
-      users: { Row: User }
-      time_entries: { Row: TimeEntry }
-      breaks: { Row: Break }
-      pto_entries: { Row: PtoEntry }
-      sick_days: { Row: SickDay }
-      punch_corrections: { Row: PunchCorrection }
-      audit_log: { Row: AuditLog }
-      login_attempts: { Row: LoginAttempt }
-      holidays: { Row: Holiday }
-      announcements: { Row: Announcement }
-      announcement_dismissals: { Row: AnnouncementDismissal }
-      export_presets: { Row: ExportPreset }
-      invite_tokens: { Row: InviteToken }
-      settings: { Row: { key: string; value: unknown } }
+      users: TableDef<User>
+      time_entries: TableDef<TimeEntry>
+      breaks: TableDef<Break>
+      pto_entries: TableDef<PtoEntry>
+      sick_days: TableDef<SickDay>
+      punch_corrections: TableDef<PunchCorrection>
+      audit_log: TableDef<AuditLog>
+      login_attempts: TableDef<LoginAttempt>
+      holidays: TableDef<Holiday>
+      announcements: TableDef<Announcement>
+      announcement_dismissals: TableDef<AnnouncementDismissal>
+      export_presets: TableDef<ExportPreset>
+      invite_tokens: TableDef<InviteToken>
+      settings: TableDef<{ key: string; value: unknown }>
     }
+    // supabase-js v2 requires these keys to exist even when empty
+    // otherwise its internal conditional types collapse selects to `never`.
+    Views: Record<string, never>
+    Functions: Record<string, never>
+    Enums: {
+      user_role: 'employee' | 'admin'
+      correction_status: 'pending' | 'approved' | 'denied'
+      sick_day_type: 'sick' | 'call_off'
+    }
+    CompositeTypes: Record<string, never>
   }
 }

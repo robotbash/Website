@@ -1,17 +1,30 @@
 import { z } from 'zod'
 
-export const ptoRequestSchema = z.object({
+// Base object without the refinement so .extend() works on it.
+const ptoRequestBase = z.object({
   startDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Invalid date'),
   endDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Invalid date'),
   hoursPerDay: z.number().min(0.5).max(24),
   note: z.string().max(300).optional(),
+})
+
+// Exported schema includes the date-order refinement.
+export const ptoRequestSchema = ptoRequestBase.refine((d) => d.startDate <= d.endDate, {
+  message: 'End date must be on or after start date',
+  path: ['endDate'],
+})
+
+// Admin schema extends the base (ZodObject) — can't extend ZodEffects.
+export const adminPtoSchema = ptoRequestBase.extend({
+  userId: z.string().uuid(),
 }).refine((d) => d.startDate <= d.endDate, {
   message: 'End date must be on or after start date',
   path: ['endDate'],
 })
 
-export const adminPtoSchema = ptoRequestSchema.extend({
-  userId: z.string().uuid(),
+export const ptoReviewSchema = z.object({
+  status: z.enum(['approved', 'denied']),
+  adminNotes: z.string().max(300).optional(),
 })
 
 export const ptoBalanceAdjustSchema = z.object({
